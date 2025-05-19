@@ -1,7 +1,18 @@
-import type { NextConfig } from "next";
+// next.config.ts
+import createMDX from '@next/mdx';
 
-const nextConfig: NextConfig = {
-  /* config options here */
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  output: "export" as const, // for Hostinger compatibility
+  pageExtensions: ['ts', 'tsx', 'md', 'mdx'],
+  images: {
+    unoptimized: true, // required for static export hosting
+  },
 };
 
-export default nextConfig;
+const withMDX = createMDX({
+  extension: /\.mdx?$/,
+});
+
+// Using ES module export syntax for consistency
+export default withMDX(nextConfig);

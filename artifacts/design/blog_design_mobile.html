@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Knowledge Blog Mobile Design</title>
+  <style>
+    :root {
+      --light-bg: #E0FBFC;
+      --dark-bg: #264653;
+      --accent-1: #2A9D8F;
+      --accent-2: #E9C46A;
+      --accent-3: #F4A261;
+      --accent-4: #E76F51;
+      --light-text: #264653;
+      --dark-text: #E0FBFC;
+      --light-border: rgba(38, 70, 83, 0.2);
+      --dark-border: rgba(224, 251, 252, 0.2);
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--light-bg);
+      color: var(--light-text);
+      line-height: 1.6;
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    /* Mobile Header */
+    .mobile-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      border-bottom: 1px solid var(--light-border);
+      position: sticky;
+      top: 0;
+      background-color: var(--light-bg);
+      z-index: 10;
+    }
+    
+    .site-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin: 0;
+      color: var(--accent-1);
+    }
+    
+    .menu-toggle, .theme-toggle {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--accent-1);
+    }
+    
+    /* Mobile Navigation */
+    .mobile-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--light-bg);
+      z-index: 100;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+    }
+    
+    .mobile-nav.active {
+      transform: translateX(0);
+    }
+    
+    .mobile-nav-header {
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--light-border);
+    }
+    
+    .mobile-nav-content {
+      padding: 1.5rem;
+    }
+    
+    .nav-links {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 2rem 0;
+    }
+    
+    .nav-links li {
+      margin-bottom: 1rem;
+    }
+    
+    .nav-links a {
+      display: block;
+      padding: 0.5rem;
+      text-decoration: none;
+      color: var(--light-text);
+      border-radius: 4px;
+      transition: background-color 0.2s;
+      font-size: 1.1rem;
+    }
+    
+    .nav-links a:hover, .nav-links a.active {
+      background-color: rgba(42, 157, 143, 0.1);
+    }
+    
+    .nav-links a.active {
+      font-weight: 600;
+      color: var(--accent-1);
+    }
+    
+    .tags-section h2 {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .tags-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    
+    .tag {
+      background-color: rgba(233, 196, 106, 0.2);
+      color: var(--accent-3);
+      padding: 0.25rem 0.5rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      text-decoration: none;
+    }
+    
+    /* Main Content */
+    .main-content {
+      padding: 1rem;
+    }
+    
+    .page-title {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      color: var(--accent-1);
+    }
+    
+    .post-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      font-size: 0.85rem;
+      opacity: 0.8;
+    }
+    
+    .post-meta time {
+      margin-right: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .post-meta .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    
+    .post-content {
+      font-family: 'Source Serif Pro', Georgia, serif;
+    }
+    
+    .post-content h2 {
+      font-size: 1.5rem;
+      margin-top: 2rem;
+      color: var(--accent-1);
+    }
+    
+    .post-content h3 {
+      font-size: 1.2rem;
+      margin-top: 1.5rem;
+      color: var(--accent-4);
+    }
+    
+    .post-content p {
+      margin-bottom: 1.5rem;
+    }
+    
+    .code-block {
+      background-color: rgba(38, 70, 83, 0.05);
+      padding: 1rem;
+      border-radius: 4px;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      border-left: 4px solid var(--accent-1);
+    }
+    
+    .expandable-section {
+      border: 1px solid var(--light-border);
+      border-radius: 4px;
+      margin: 1.5rem 0;
+    }
+    
+    .expandable-header {
+      background-color: rgba(42, 157, 143, 0.1);
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .expandable-content {
+      padding: 1rem;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 0.85rem;
+    }
+    
+    table th, table td {
+      padding: 0.6rem;
+      border: 1px solid var(--light-border);
+    }
+    
+    table th {
+      background-color: rgba(42, 157, 143, 0.1);
+      text-align: left;
+    }
+    
+    .scroll-indicator {
+      width: 100%;
+      height: 4px;
+      background-color: rgba(42, 157, 143, 0.2);
+      position: sticky;
+      top: 53px;
+      z-index: 5;
+    }
+    
+    .scroll-progress {
+      height: 100%;
+      background-color: var(--accent-1);
+      width: 0%;
+    }
+    
+    .comments-section {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--light-border);
+    }
+    
+    .comments-section h3 {
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+    
+    .comment {
+      background-color: rgba(38, 70, 83, 0.03);
+      padding: 1rem;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+    }
+    
+    .comment-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    
+    .avatar {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      margin-right: 0.75rem;
+      background-color: var(--accent-2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+    }
+    
+    .comment-author {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    
+    .comment-date {
+      font-size: 0.8rem;
+      opacity: 0.7;
+      margin-left: auto;
+    }
+    
+    .comment-content {
+      font-size: 0.9rem;
+    }
+    
+    .floating-action {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      width: 3.5rem;
+      height: 3.5rem;
+      border-radius: 50%;
+      background-color: var(--accent-1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.8rem;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      z-index: 50;
+      text-decoration: none;
+    }
+    
+    /* Dark Mode */
+    .dark-mode {
+      background-color: var(--dark-bg);
+      color: var(--dark-text);
+    }
+    
+    .dark-mode .mobile-header {
+      background-color: var(--dark-bg);
+      border-bottom-color: var(--dark-border);
+    }
+    
+    .dark-mode .mobile-nav {
+      background-color: var(--dark-bg);
+    }
+    
+    .dark-mode .mobile-nav-header {
+      border-bottom-color: var(--dark-border);
+    }
+    
+    .dark-mode .nav-links a {
+      color: var(--dark-text);
+    }
+    
+    .dark-mode .nav-links a:hover, .dark-mode .nav-links a.active {
+      background-color: rgba(224, 251, 252, 0.1);
+    }
+    
+    .dark-mode .code-block {
+      background-color: rgba(224, 251, 252, 0.05);
+    }
+    
+    .dark-mode .expandable-header {
+      background-color: rgba(224, 251, 252, 0.05);
+    }
+    
+    .dark-mode table th, .dark-mode table td {
+      border-color: var(--dark-border);
+    }
+    
+    .dark-mode table th {
+      background-color: rgba(224, 251, 252, 0.05);
+    }
+    
+    .dark-mode .comment {
+      background-color: rgba(224, 251, 252, 0.05);
+    }
+    
+    .dark-mode .comments-section {
+      border-top-color: var(--dark-border);
+    }
+    
+    .dark-mode .menu-toggle, .dark-mode .theme-toggle {
+      color: var(--dark-text);
+    }
+  </style>
+</head>
+<body>
+  <header class="mobile-header">
+    <button class="menu-toggle">☰</button>
+    <h1 class="site-title">Knowledge Blog</h1>
+    <button class="theme-toggle">🌙</button>
+  </header>
+  
+  <div class="scroll-indicator">
+    <div class="scroll-progress"></div>
+  </div>
+  
+  <!-- Mobile Navigation Menu -->
+  <nav class="mobile-nav">
+    <div class="mobile-nav-header">
+      <h2 class="site-title">Knowledge Blog</h2>
+      <button class="menu-toggle">✕</button>
+    </div>
+    
+    <div class="mobile-nav-content">
+      <ul class="nav-links">
+        <li><a href="#" class="active">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+      
+      <div class="tags-section">
+        <h2>Popular Tags</h2>
+        <div class="tags-cloud">
+          <a href="#" class="tag">javascript</a>
+          <a href="#" class="tag">react</a>
+          <a href="#" class="tag">algorithms</a>
+          <a href="#" class="tag">ai</a>
+          <a href="#" class="tag">programming</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+  
+  <!-- Main Content -->
+  <main class="main-content">
+    <article>
+      <h1 class="page-title">Introduction to Neural Networks</h1>
+      
+      <div class="post-meta">
+        <time>May 20, 2025</time>
+        <div class="tags">
+          <a href="#" class="tag">machine-learning</a>
+          <a href="#" class="tag">neural-networks</a>
+          <a href="#" class="tag">AI</a>
+        </div>
+      </div>
+      
+      <div class="post-content">
+        <p>Neural networks have revolutionized machine learning in recent years. Let's explore how they work.</p>
+        
+        <h2>Basic Structure</h2>
+        <p>A neural network consists of layers of neurons. Here's a simple diagram:</p>
+        
+        <div class="diagram">
+          <!-- Placeholder for diagram -->
+          <div style="background-color: rgba(42, 157, 143, 0.1); padding: 1rem; text-align: center; border-radius: 4px;">
+            [Neural Network Diagram]
+          </div>
+        </div>
+        
+        <h2>Mathematical Foundation</h2>
+        <p>The activation of a neuron can be represented by the following equation:</p>
+        
+        <div class="math-equation" style="text-align: center; padding: 1rem 0;">
+          y = σ(∑(w_i * x_i) + b)
+        </div>
+        
+        <p>Where:</p>
+        <ul>
+          <li>σ is the activation function</li>
+          <li>w_i are the weights</li>
+          <li>x_i are the inputs</li>
+          <li>b is the bias</li>
+        </ul>
+        
+        <h2>Implementation Example</h2>
+        <p>Here's a simple implementation in Python:</p>
+        
+        <div class="code-block">
+          import numpy as np<br><br>
+          
+          def sigmoid(x):<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;return 1 / (1 + np.exp(-x))<br><br>
+          
+          class SimpleNeuron:<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;def __init__(self, weights, bias):<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.weights = weights<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.bias = bias<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;def forward(self, inputs):<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Calculate weighted sum<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;total = np.dot(self.weights, inputs) + self.bias<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Apply activation function<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return sigmoid(total)
+        </div>
+        
+        <div class="expandable-section">
+          <div class="expandable-header">
+            <h3 style="margin: 0;">Advanced Topics</h3>
+            <span>+</span>
+          </div>
+          <div class="expandable-content" style="display: none;">
+            <p>For those interested in going deeper, consider exploring:</p>
+            <ul>
+              <li>Backpropagation algorithms</li>
+              <li>Convolutional neural networks for image processing</li>
+              <li>Recurrent neural networks for sequential data</li>
+            </ul>
+          </div>
+        </div>
+        
+        <h2>Next Steps</h2>
+        <p>In the next post, we'll explore how to train neural networks efficiently using backpropagation.</p>
+      </div>
+    </article>
+    
+    <section class="comments-section">
+      <h3>Comments (2)</h3>
+      
+      <div class="comment">
+        <div class="comment-header">
+          <div class="avatar">J</div>
+          <div class="comment-author">John Doe</div>
+          <div class="comment-date">2d</div>
+        </div>
+        <div class="comment-content">
+          <p>Great introduction! I'd love to see more about backpropagation in your next post.</p>
+        </div>
+      </div>
+      
+      <div class="comment">
+        <div class="comment-header">
+          <div class="avatar">S</div>
+          <div class="comment-author">Sarah Smith</div>
+          <div class="comment-date">1d</div>
+        </div>
+        <div class="comment-content">
+          <p>The diagram really helped me understand the concept. I was wondering if you could explain more about activation functions?</p>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <a href="#" class="floating-action">+</a>
+  
+  <script>
+    // Simple dark mode toggle
+    const themeToggle = document.querySelector('.theme-toggle');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      themeToggle.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+    });
+    
+    // Mobile menu toggle
+    const menuToggles = document.querySelectorAll('.menu-toggle');
+    const mobileNav = document.querySelector('.mobile-nav');
+    
+    menuToggles.forEach(toggle => {
+      toggle.addEventListener('click', () => {
+        mobileNav.classList.toggle('active');
+      });
+    });
+    
+    // Expandable sections
+    const expandables = document.querySelectorAll('.expandable-header');
+    expandables.forEach(header => {
+      header.addEventListener('click', () => {
+        const content = header.nextElementSibling;
+        content.style.display = content.style.display === 'none' ? 'block' : 'none';
+        header.querySelector('span').textContent = content.style.display === 'none' ? '+' : '-';
+      });
+    });
+    
+    // Scroll progress indicator
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.body.offsetHeight - window.innerHeight;
+      const scrollPercent = (scrollTop / docHeight) * 100;
+      document.querySelector('.scroll-progress').style.width = scrollPercent + '%';
+    });
+  </script>
+</body>
+</html>

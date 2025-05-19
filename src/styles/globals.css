@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+:root {
+  --bg-light: #E0FBFC;
+  --bg-dark: #264653;
+  --text-light: #264653;
+  --text-dark: #E0FBFC;
+
+  --accent-1: #2A9D8F;
+  --accent-2: #E9C46A;
+  --accent-3: #F4A261;
+  --accent-4: #E76F51;
+  
+  --font-sans: Inter, sans-serif;
+  --font-serif: 'Source Serif Pro', serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+body {
+  background-color: var(--bg-light);
+  color: var(--text-light);
+  font-family: var(--font-sans);
+}
+
+.dark body {
+  background-color: var(--bg-dark);
+  color: var(--text-dark);
+}

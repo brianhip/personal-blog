@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Knowledge Blog Design</title>
+  <style>
+    :root {
+      --light-bg: #E0FBFC;
+      --dark-bg: #264653;
+      --accent-1: #2A9D8F;
+      --accent-2: #E9C46A;
+      --accent-3: #F4A261;
+      --accent-4: #E76F51;
+      --light-text: #264653;
+      --dark-text: #E0FBFC;
+      --light-border: rgba(38, 70, 83, 0.2);
+      --dark-border: rgba(224, 251, 252, 0.2);
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--light-bg);
+      color: var(--light-text);
+      line-height: 1.6;
+    }
+    
+    /* Light/Dark Mode Toggle */
+    .theme-toggle {
+      position: fixed;
+      top: 1.5rem;
+      right: 1.5rem;
+      z-index: 100;
+      background: var(--accent-1);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 2.5rem;
+      height: 2.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+    
+    /* Sidebar Styles */
+    .sidebar {
+      width: 250px;
+      background-color: rgba(42, 157, 143, 0.1);
+      padding: 2rem 1rem;
+      border-right: 1px solid var(--light-border);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    
+    .sidebar-header {
+      margin-bottom: 2rem;
+    }
+    
+    .sidebar-header h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0;
+      color: var(--accent-1);
+    }
+    
+    .sidebar-header p {
+      font-size: 0.9rem;
+      margin: 0.5rem 0 0;
+      opacity: 0.8;
+    }
+    
+    .nav-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .nav-links li {
+      margin-bottom: 0.5rem;
+    }
+    
+    .nav-links a {
+      display: block;
+      padding: 0.5rem;
+      text-decoration: none;
+      color: var(--light-text);
+      border-radius: 4px;
+      transition: background-color 0.2s;
+    }
+    
+    .nav-links a:hover, .nav-links a.active {
+      background-color: rgba(42, 157, 143, 0.2);
+    }
+    
+    .nav-links a.active {
+      font-weight: 600;
+      color: var(--accent-1);
+    }
+    
+    .tags-section {
+      margin-top: 2rem;
+    }
+    
+    .tags-section h2 {
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .tags-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    
+    .tag {
+      background-color: rgba(233, 196, 106, 0.2);
+      color: var(--accent-3);
+      padding: 0.25rem 0.5rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      text-decoration: none;
+    }
+    
+    /* Main Content Styles */
+    .main-content {
+      flex: 1;
+      padding: 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    
+    .page-title {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: var(--accent-1);
+    }
+    
+    .post-meta {
+      display: flex;
+      align-items: center;
+      margin-bottom: 2rem;
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+    
+    .post-meta time {
+      margin-right: 1rem;
+    }
+    
+    .post-content {
+      font-family: 'Source Serif Pro', Georgia, serif;
+    }
+    
+    .post-content h2 {
+      font-size: 1.8rem;
+      margin-top: 2rem;
+      color: var(--accent-1);
+    }
+    
+    .post-content h3 {
+      font-size: 1.4rem;
+      margin-top: 1.5rem;
+      color: var(--accent-4);
+    }
+    
+    .post-content p {
+      margin-bottom: 1.5rem;
+    }
+    
+    .code-block {
+      background-color: rgba(38, 70, 83, 0.05);
+      padding: 1rem;
+      border-radius: 4px;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      border-left: 4px solid var(--accent-1);
+    }
+    
+    .expandable-section {
+      border: 1px solid var(--light-border);
+      border-radius: 4px;
+      margin: 1.5rem 0;
+    }
+    
+    .expandable-header {
+      background-color: rgba(42, 157, 143, 0.1);
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .expandable-content {
+      padding: 1rem;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+    }
+    
+    table th, table td {
+      padding: 0.75rem;
+      border: 1px solid var(--light-border);
+    }
+    
+    table th {
+      background-color: rgba(42, 157, 143, 0.1);
+      text-align: left;
+    }
+    
+    .comments-section {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--light-border);
+    }
+    
+    .comments-section h3 {
+      margin-bottom: 1rem;
+    }
+    
+    .comment {
+      background-color: rgba(38, 70, 83, 0.03);
+      padding: 1rem;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+    }
+    
+    .comment-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    
+    .avatar {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      margin-right: 0.75rem;
+      background-color: var(--accent-2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+    }
+    
+    .comment-author {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    
+    .comment-date {
+      font-size: 0.8rem;
+      opacity: 0.7;
+      margin-left: auto;
+    }
+    
+    .comment-content {
+      font-size: 0.95rem;
+    }
+    
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        border-right: none;
+        border-bottom: 1px solid var(--light-border);
+        padding: 1rem;
+      }
+      
+      .main-content {
+        padding: 1rem;
+      }
+      
+      .page-title {
+        font-size: 2rem;
+      }
+    }
+    
+    /* Dark Mode */
+    .dark-mode {
+      background-color: var(--dark-bg);
+      color: var(--dark-text);
+    }
+    
+    .dark-mode .sidebar {
+      background-color: rgba(224, 251, 252, 0.05);
+      border-right-color: var(--dark-border);
+    }
+    
+    .dark-mode .nav-links a {
+      color: var(--dark-text);
+    }
+    
+    .dark-mode .nav-links a:hover, .dark-mode .nav-links a.active {
+      background-color: rgba(224, 251, 252, 0.1);
+    }
+    
+    .dark-mode .code-block {
+      background-color: rgba(224, 251, 252, 0.05);
+    }
+    
+    .dark-mode .expandable-header {
+      background-color: rgba(224, 251, 252, 0.05);
+    }
+    
+    .dark-mode table th, .dark-mode table td {
+      border-color: var(--dark-border);
+    }
+    
+    .dark-mode table th {
+      background-color: rgba(224, 251, 252, 0.05);
+    }
+    
+    .dark-mode .comment {
+      background-color: rgba(224, 251, 252, 0.05);
+    }
+    
+    .dark-mode .comments-section {
+      border-top-color: var(--dark-border);
+    }
+  </style>
+</head>
+<body>
+  <button class="theme-toggle">🌙</button>
+  
+  <div class="container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>Knowledge Blog</h1>
+        <p>Personal documentation & learnings</p>
+      </div>
+      
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#" class="active">Home</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </nav>
+      
+      <div class="tags-section">
+        <h2>Popular Tags</h2>
+        <div class="tags-cloud">
+          <a href="#" class="tag">javascript</a>
+          <a href="#" class="tag">react</a>
+          <a href="#" class="tag">algorithms</a>
+          <a href="#" class="tag">ai</a>
+          <a href="#" class="tag">programming</a>
+        </div>
+      </div>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+      <article>
+        <h1 class="page-title">Introduction to Neural Networks</h1>
+        
+        <div class="post-meta">
+          <time>May 20, 2025</time>
+          <span class="tags">
+            <a href="#" class="tag">machine-learning</a>
+            <a href="#" class="tag">neural-networks</a>
+            <a href="#" class="tag">AI</a>
+          </span>
+        </div>
+        
+        <div class="post-content">
+          <p>Neural networks have revolutionized machine learning in recent years. Let's explore how they work.</p>
+          
+          <h2>Basic Structure</h2>
+          <p>A neural network consists of layers of neurons. Here's a simple diagram:</p>
+          
+          <div class="diagram">
+            <!-- Placeholder for diagram -->
+            <div style="background-color: rgba(42, 157, 143, 0.1); padding: 1rem; text-align: center; border-radius: 4px;">
+              [Neural Network Diagram]
+            </div>
+          </div>
+          
+          <h2>Mathematical Foundation</h2>
+          <p>The activation of a neuron can be represented by the following equation:</p>
+          
+          <div class="math-equation" style="text-align: center; padding: 1rem 0;">
+            y = σ(∑(w_i * x_i) + b)
+          </div>
+          
+          <p>Where:</p>
+          <ul>
+            <li>σ is the activation function</li>
+            <li>w_i are the weights</li>
+            <li>x_i are the inputs</li>
+            <li>b is the bias</li>
+          </ul>
+          
+          <h2>Implementation Example</h2>
+          <p>Here's a simple implementation in Python:</p>
+          
+          <div class="code-block">
+            import numpy as np<br><br>
+            
+            def sigmoid(x):<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;return 1 / (1 + np.exp(-x))<br><br>
+            
+            class SimpleNeuron:<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;def __init__(self, weights, bias):<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.weights = weights<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.bias = bias<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;def forward(self, inputs):<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Calculate weighted sum<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;total = np.dot(self.weights, inputs) + self.bias<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Apply activation function<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return sigmoid(total)
+          </div>
+          
+          <h2>Comparison with Other Models</h2>
+          
+          <table>
+            <thead>
+              <tr>
+                <th>Model Type</th>
+                <th>Strengths</th>
+                <th>Weaknesses</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Neural Networks</td>
+                <td>Highly flexible, good with unstructured data</td>
+                <td>Require lots of data, black box</td>
+              </tr>
+              <tr>
+                <td>Decision Trees</td>
+                <td>Interpretable, handle mixed data types</td>
+                <td>Less powerful on complex patterns</td>
+              </tr>
+              <tr>
+                <td>SVM</td>
+                <td>Good with limited data, clear margin</td>
+                <td>Feature engineering needed</td>
+              </tr>
+            </tbody>
+          </table>
+          
+          <div class="expandable-section">
+            <div class="expandable-header">
+              <h3 style="margin: 0;">Advanced Topics</h3>
+              <span>+</span>
+            </div>
+            <div class="expandable-content" style="display: none;">
+              <p>For those interested in going deeper, consider exploring:</p>
+              <ul>
+                <li>Backpropagation algorithms</li>
+                <li>Convolutional neural networks for image processing</li>
+                <li>Recurrent neural networks for sequential data</li>
+              </ul>
+            </div>
+          </div>
+          
+          <h2>Next Steps</h2>
+          <p>In the next post, we'll explore how to train neural networks efficiently using backpropagation.</p>
+        </div>
+      </article>
+      
+      <section class="comments-section">
+        <h3>Comments (2)</h3>
+        
+        <div class="comment">
+          <div class="comment-header">
+            <div class="avatar">J</div>
+            <div class="comment-author">John Doe</div>
+            <div class="comment-date">2 days ago</div>
+          </div>
+          <div class="comment-content">
+            <p>Great introduction! I'd love to see more about backpropagation in your next post.</p>
+          </div>
+        </div>
+        
+        <div class="comment">
+          <div class="comment-header">
+            <div class="avatar">S</div>
+            <div class="comment-author">Sarah Smith</div>
+            <div class="comment-date">Yesterday</div>
+          </div>
+          <div class="comment-content">
+            <p>The diagram really helped me understand the concept. I was wondering if you could explain more about activation functions in a future post?</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  
+  <script>
+    // Simple dark mode toggle
+    const themeToggle = document.querySelector('.theme-toggle');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      themeToggle.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+    });
+    
+    // Expandable sections
+    const expandables = document.querySelectorAll('.expandable-header');
+    expandables.forEach(header => {
+      header.addEventListener('click', () => {
+        const content = header.nextElementSibling;
+        content.style.display = content.style.display === 'none' ? 'block' : 'none';
+        header.querySelector('span').textContent = content.style.display === 'none' ? '+' : '-';
+      });
+    });
+  </script>
+</body>
+</html>
